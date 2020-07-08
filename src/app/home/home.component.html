@@ -1,0 +1,61 @@
+<div *ngIf="isLoading" class="loader"><span class="spinner-border text-primary"></span></div>
+<div *ngIf="hasError" class="error">An error occurred. Please try again after sometime!</div>
+<div fxLayout="row wrap" class="img-manager">
+  <div id="userActv" fxFlex.gt-sm="30" fxFlex.gt-xs="30" fxFlex="100" class="cmpn-left">
+    <div class="left-10">
+      <div style="width:382px">
+        <mat-form-field>
+          <input matInput type="text" [(ngModel)]="searchInput" placeholder="Search Category" (keyup)="getSearchCategory($event.target.value)">
+        </mat-form-field>
+      </div>
+    </div>
+    <div style="padding-right: 8px; cursor: pointer;">
+      <mat-card *ngFor="let categoryDetails of imageCategory"
+        style="padding:0">
+        <mat-card-content (click)="assignCategory(categoryDetails)">
+          <div fxFlex="80">
+            <ngx-avatar class="card-avatar pull-left" size="25" name="{{categoryDetails.name}}"></ngx-avatar>
+            <span>{{categoryDetails?.name | titlecase}}</span>
+
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div fxFlex.gt-sm="60" fxFlex.gt-xs="50" fxFlex="100">
+    <div *ngIf="displayImages" class="clearfix mar-lft">
+      <div style="padding-block-end: 11px; margin-left: 200px;color:blue">
+        <h2> Cat Images for {{selectCategory | titlecase}} Category </h2>
+      </div>
+    </div>
+    <perfect-scrollbar style="max-width: 800px; max-height: 400px;  cursor: pointer;">
+      <div *ngIf="displayImages" fxLayout="row wrap">
+        <div fxFlex.gt-sm="50" fxFlex.gt-xs="50" fxFlex="100" *ngFor="let images of imageData">
+          <mat-card fxFlex class="usercard">
+            <mat-card-content>
+              <div fxLayout="row wrap">
+                <div fxFlex="90" class="UcardLeft">
+                  <div class="pad-all2 clearfix">
+                    <div fxLayout="row wrap" class="clearfix card-top">
+                      <div>
+                        <div class="example-card">
+                          <img mat-card-image class="imgs" src="{{images?.url}}" alt="{{images?.url}}">
+                          &nbsp;
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </perfect-scrollbar>
+    <div class="no-shadow" *ngIf="imageList && imageList.length>pageSize">
+      <mat-paginator [length]="imageList?.length" [pageSize]="pageSize" [pageIndex]="initPage"
+        (page)="getData($event,true)">
+      </mat-paginator>
+    </div>
+  </div>
